@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Database1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Programmer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="firstName" Type="char" MaxLength="30" Nullable="false" />
+          <Property Name="lastName" Type="char" MaxLength="30" Nullable="false" />
+          <Property Name="Email" Type="char" MaxLength="40" Nullable="false" />
+          <Property Name="Phone" Type="int" />
+          <Property Name="Password" Type="char" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProgrammerSkills">
+          <Key>
+            <PropertyRef Name="IDProgrammerSkills" />
+          </Key>
+          <Property Name="IDProgrammerSkills" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdSkills" Type="int" Nullable="false" />
+          <Property Name="IdProgrammers" Type="int" Nullable="false" />
+          <Property Name="expert" Type="int" Nullable="false" />
+          <Property Name="cretificate" Type="image" />
+        </EntityType>
+        <EntityType Name="Skills">
+          <Key>
+            <PropertyRef Name="IdSkills" />
+          </Key>
+          <Property Name="IdSkills" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="char" MaxLength="20" />
+          <Property Name="details" Type="varchar(max)" />
+        </EntityType>
+        <Association Name="IdProgrammers">
+          <End Role="Programmer" Type="Self.Programmer" Multiplicity="1" />
+          <End Role="ProgrammerSkills" Type="Self.ProgrammerSkills" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Programmer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProgrammerSkills">
+              <PropertyRef Name="IdProgrammers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdSkills">
+          <End Role="Skills" Type="Self.Skills" Multiplicity="1" />
+          <End Role="ProgrammerSkills" Type="Self.ProgrammerSkills" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skills">
+              <PropertyRef Name="IdSkills" />
+            </Principal>
+            <Dependent Role="ProgrammerSkills">
+              <PropertyRef Name="IdSkills" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Database1ModelStoreContainer">
+          <EntitySet Name="Programmer" EntityType="Self.Programmer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProgrammerSkills" EntityType="Self.ProgrammerSkills" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="IdProgrammers" Association="Self.IdProgrammers">
+            <End Role="Programmer" EntitySet="Programmer" />
+            <End Role="ProgrammerSkills" EntitySet="ProgrammerSkills" />
+          </AssociationSet>
+          <AssociationSet Name="IdSkills" Association="Self.IdSkills">
+            <End Role="Skills" EntitySet="Skills" />
+            <End Role="ProgrammerSkills" EntitySet="ProgrammerSkills" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Database1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Programmer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstName" Type="String" MaxLength="30" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="lastName" Type="String" MaxLength="30" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="40" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Phone" Type="Int32" />
+          <Property Name="Password" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ProgrammerSkills" Relationship="Self.IdProgrammers" FromRole="Programmer" ToRole="ProgrammerSkills" />
+        </EntityType>
+        <EntityType Name="ProgrammerSkill">
+          <Key>
+            <PropertyRef Name="IDProgrammerSkills" />
+          </Key>
+          <Property Name="IDProgrammerSkills" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdSkills" Type="Int32" Nullable="false" />
+          <Property Name="IdProgrammers" Type="Int32" Nullable="false" />
+          <Property Name="expert" Type="Int32" Nullable="false" />
+          <Property Name="cretificate" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Programmer" Relationship="Self.IdProgrammers" FromRole="ProgrammerSkills" ToRole="Programmer" />
+          <NavigationProperty Name="Skill" Relationship="Self.IdSkills" FromRole="ProgrammerSkills" ToRole="Skills" />
+        </EntityType>
+        <EntityType Name="Skill">
+          <Key>
+            <PropertyRef Name="IdSkills" />
+          </Key>
+          <Property Name="IdSkills" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="details" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ProgrammerSkills" Relationship="Self.IdSkills" FromRole="Skills" ToRole="ProgrammerSkills" />
+        </EntityType>
+        <Association Name="IdProgrammers">
+          <End Role="Programmer" Type="Self.Programmer" Multiplicity="1" />
+          <End Role="ProgrammerSkills" Type="Self.ProgrammerSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Programmer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProgrammerSkills">
+              <PropertyRef Name="IdProgrammers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdSkills">
+          <End Role="Skills" Type="Self.Skill" Multiplicity="1" />
+          <End Role="ProgrammerSkills" Type="Self.ProgrammerSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skills">
+              <PropertyRef Name="IdSkills" />
+            </Principal>
+            <Dependent Role="ProgrammerSkills">
+              <PropertyRef Name="IdSkills" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Database1Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Programmers" EntityType="Self.Programmer" />
+          <EntitySet Name="ProgrammerSkills" EntityType="Self.ProgrammerSkill" />
+          <EntitySet Name="Skills" EntityType="Self.Skill" />
+          <AssociationSet Name="IdProgrammers" Association="Self.IdProgrammers">
+            <End Role="Programmer" EntitySet="Programmers" />
+            <End Role="ProgrammerSkills" EntitySet="ProgrammerSkills" />
+          </AssociationSet>
+          <AssociationSet Name="IdSkills" Association="Self.IdSkills">
+            <End Role="Skills" EntitySet="Skills" />
+            <End Role="ProgrammerSkills" EntitySet="ProgrammerSkills" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Database1ModelStoreContainer" CdmEntityContainer="Database1Entities">
+          <EntitySetMapping Name="Programmers">
+            <EntityTypeMapping TypeName="Database1Model.Programmer">
+              <MappingFragment StoreEntitySet="Programmer">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProgrammerSkills">
+            <EntityTypeMapping TypeName="Database1Model.ProgrammerSkill">
+              <MappingFragment StoreEntitySet="ProgrammerSkills">
+                <ScalarProperty Name="IDProgrammerSkills" ColumnName="IDProgrammerSkills" />
+                <ScalarProperty Name="IdSkills" ColumnName="IdSkills" />
+                <ScalarProperty Name="IdProgrammers" ColumnName="IdProgrammers" />
+                <ScalarProperty Name="expert" ColumnName="expert" />
+                <ScalarProperty Name="cretificate" ColumnName="cretificate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Skills">
+            <EntityTypeMapping TypeName="Database1Model.Skill">
+              <MappingFragment StoreEntitySet="Skills">
+                <ScalarProperty Name="IdSkills" ColumnName="IdSkills" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="details" ColumnName="details" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
